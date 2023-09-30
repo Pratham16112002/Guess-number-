@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Alert, FlatList } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  Alert,
+  FlatList,
+  useWindowDimensions
+} from 'react-native'
 import HeadingTitle from '../components/Title'
 import NumberContainer from '../components/NumberContainer'
 import PrimaryButton from '../components/PrimaryButton'
-import MediumTitle from '../components/MediumTitle'
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import Card from '../components/Card'
 import Colors from '../utils/Colors'
@@ -82,12 +87,10 @@ const GameScreen: React.FC<GameScreenProps> = ({
     maxNumber = 100
   }, [])
   const noOfRounds = guessRounds.length
-  return (
-    <View style={styles.screen}>
-      <HeadingTitle>Opponent&apos;s Guess</HeadingTitle>
-      <NumberContainer>{currentGuess}</NumberContainer>
+  const { width } = useWindowDimensions()
+  let content = (
+    <>
       <Card>
-        <MediumTitle>Higher or Lower ?</MediumTitle>
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonContainer}>
             <PrimaryButton
@@ -100,6 +103,8 @@ const GameScreen: React.FC<GameScreenProps> = ({
               />{' '}
             </PrimaryButton>
           </View>
+          <NumberContainer>{currentGuess}</NumberContainer>
+
           <View style={styles.buttonContainer}>
             <PrimaryButton
               onPress={nextGuessHandler.bind(this, Direction.lower)}
@@ -113,6 +118,47 @@ const GameScreen: React.FC<GameScreenProps> = ({
           </View>
         </View>
       </Card>
+    </>
+  )
+
+  if (width > 500) {
+    content = (
+      <>
+        <View style={styles.buttonContainerHorizontal}>
+          <View style={styles.buttonsContainer}>
+            <View style={styles.buttonContainer}>
+              <PrimaryButton
+                onPress={nextGuessHandler.bind(this, Direction.higher)}
+              >
+                <AntDesign
+                  name="pluscircle"
+                  size={24}
+                  color={Colors.secondary500}
+                />{' '}
+              </PrimaryButton>
+            </View>
+            <NumberContainer>{currentGuess}</NumberContainer>
+
+            <View style={styles.buttonContainer}>
+              <PrimaryButton
+                onPress={nextGuessHandler.bind(this, Direction.lower)}
+              >
+                <MaterialCommunityIcons
+                  name="minus-circle"
+                  size={24}
+                  color={Colors.secondary500}
+                />{' '}
+              </PrimaryButton>
+            </View>
+          </View>
+        </View>
+      </>
+    )
+  }
+  return (
+    <View style={styles.screen}>
+      <HeadingTitle>Opponent&apos;s Guess</HeadingTitle>
+      {content}
       <View style={styles.listContainer}>
         <FlatList
           data={guessRounds}
@@ -132,9 +178,14 @@ const GameScreen: React.FC<GameScreenProps> = ({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    alignItems: 'center',
     padding: 24
   },
   buttonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  buttonContainerHorizontal: {
     flexDirection: 'row',
     alignItems: 'center'
   },

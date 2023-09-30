@@ -1,5 +1,12 @@
 import React from 'react'
-import { View, Image, StyleSheet, Text } from 'react-native'
+import {
+  View,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Text,
+  useWindowDimensions
+} from 'react-native'
 import HeadingTitle from '../components/Title'
 import Colors from '../utils/Colors'
 import RestartButton from '../components/RestartButton'
@@ -15,26 +22,44 @@ const GameOverScreen: React.FC<Props> = ({
   guessRounds,
   restartGame
 }) => {
+  const { height } = useWindowDimensions()
+  let imageSize = 300
+  if (height < 380) {
+    imageSize = 150
+  }
+  if (height < 400) {
+    imageSize = 100
+  }
+  const imageStyle = {
+    height: imageSize,
+    width: imageSize,
+    borderRadius: imageSize / 2
+  }
   return (
-    <View style={styles.rootContainer}>
-      <HeadingTitle>GAME OVER!</HeadingTitle>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={require('../assets/images/success.png')}
-        />
+    <ScrollView style={styles.screen}>
+      <View style={styles.rootContainer}>
+        <HeadingTitle>GAME OVER!</HeadingTitle>
+        <View style={[styles.imageContainer, imageStyle]}>
+          <Image
+            style={styles.image}
+            source={require('../assets/images/success.png')}
+          />
+        </View>
+        <Text style={styles.summaryText}>
+          You need <Text style={styles.highlight}>{guessRounds}</Text> number of
+          guess to guess <Text style={styles.highlight}>{userNumber}</Text>{' '}
+          number.
+        </Text>
+        <RestartButton onPress={restartGame}>Restart</RestartButton>
       </View>
-      <Text style={styles.summaryText}>
-        You need <Text style={styles.highlight}>{guessRounds}</Text> number of
-        guess to guess <Text style={styles.highlight}>{userNumber}</Text>{' '}
-        number.
-      </Text>
-      <RestartButton onPress={restartGame}>Restart</RestartButton>
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1
+  },
   rootContainer: {
     flex: 1,
     padding: 24,
@@ -42,9 +67,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   imageContainer: {
-    width: 400,
-    height: 400,
-    borderRadius: 200,
     borderWidth: 3,
     borderColor: Colors.primary600,
     overflow: 'hidden',

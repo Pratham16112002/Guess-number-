@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import Colors from '../utils/Colors'
 
 interface PropsWithChildren {
@@ -7,7 +7,14 @@ interface PropsWithChildren {
 }
 
 const Card: React.FC<PropsWithChildren> = ({ children }) => {
-  return <View style={styles.cardContainer}>{children}</View>
+  const { height } = useWindowDimensions()
+
+  const marginTopDistance = height < 380 ? 12 : 36
+  return (
+    <View style={[styles.cardContainer, { marginTop: marginTopDistance }]}>
+      {children}
+    </View>
+  )
 }
 
 export default Card
@@ -17,8 +24,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    marginTop: 36,
-    marginHorizontal: 24,
+    marginHorizontal: 12,
     backgroundColor: Colors.primary600,
     borderRadius: 10,
     shadowColor: 'black',

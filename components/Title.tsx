@@ -19,7 +19,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 8,
     padding: 6,
-    textAlign: 'center'
+    textAlign: 'center',
+    width: 300,
+    maxWidth: '80%'
   }
 })
 
