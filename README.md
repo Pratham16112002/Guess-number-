@@ -24,7 +24,7 @@ Guess Game: React Native Edition" is an engaging and interactive mobile game tha
 
 ## Demo
 
-![Demo]('/assets/demo.gif')
+![Demo]('https://github.com/Pratham16112002/Guess-number-/blob/main/assets/demo.gif')
 
 
 ## Installation
